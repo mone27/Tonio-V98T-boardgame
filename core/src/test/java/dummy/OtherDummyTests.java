@@ -16,10 +16,6 @@ import static it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit.*;
 public class OtherDummyTests {
 
 
-
-    /**
-     * Checks that an exception is thrown if two units are added to the same tile
-     */
     @Test
     public void testAddRemoveUnit() {
         Board board = new BoardImpl(new Unit[4][4]);
@@ -43,5 +39,4 @@ public class OtherDummyTests {
                 () -> board.addUnit(1,0, new Fairy(UnitColor.THREE))
         );
     }
-
 }
