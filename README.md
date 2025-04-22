@@ -9,8 +9,8 @@ All images were downloaded from [Game-icons.net](https://game-icons.net/).
 
 ## Requirements
 
-- Java JDK version 17 or higher
-- Gradle version 7.2 or higher
+- Java JDK version 21 or higher
+- Gradle version 8.5 or higher
 
 ## Usage
 
