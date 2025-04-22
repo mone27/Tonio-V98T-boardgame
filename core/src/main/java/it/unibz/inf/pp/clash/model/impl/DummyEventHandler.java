@@ -66,7 +66,8 @@ public class DummyEventHandler implements EventHandler {
                 new DummySnapshot(
                         firstHero,
                         secondHero
-                ), "This is a dummy game snapshot, for demonstration purposes."
+                ),
+                "This is a dummy game snapshot, for demonstration purposes."
         );
     }
 
@@ -76,7 +77,8 @@ public class DummyEventHandler implements EventHandler {
                 new AnotherDummySnapshot(
                         "Alice",
                         "Bob"
-                ), "This is another dummy game snapshot, to test animations."
+                ),
+                "This is another dummy game snapshot, to test animations."
         );
     }
 
@@ -86,7 +88,8 @@ public class DummyEventHandler implements EventHandler {
                 new DummySnapshot(
                         "Alice",
                         "Bob"
-                ), "This is a dummy game snapshot, for demonstration purposes."
+                ),
+                "This is a dummy game snapshot, for demonstration purposes."
         );
     }
 

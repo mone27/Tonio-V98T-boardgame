@@ -16,7 +16,7 @@ public class ReinforcementButtonListener extends ClickListener {
 
     @Override
     public void clicked(InputEvent event, float x, float y) {
-        System.out.println("Reinforcement button pressed");
+        System.out.println("Reinforcement button clicked");
         eventHandler.callReinforcement();
     }
 }

@@ -149,7 +149,7 @@ where `MyEventHandler` is the name of your class.
   This interface is already implemented (with the class [DisplayManagerImpl](core/src/main/java/it/unibz/inf/pp/clash/view/impl/DisplayManagerImpl.java)), as part of the view component.
   You can implement a fully functional game without modifying this implementation.
 
-- In particular, you can draw a snapshot on screen by calling the method [DisplayManager.drawSnapshot](core/src/main/java/it/unibz/inf/pp/clash/view/DisplayManager.java)
+- In particular, you can draw a snapshot on screen by calling the instance method [DisplayManager.drawSnapshot](core/src/main/java/it/unibz/inf/pp/clash/view/DisplayManager.java)
   (with your snapshot as argument).\
   If there was another snapshot on screen prior to this call, then the two snapshots will be compared and their differences highlighted,
   with a fade-in animation.\
@@ -166,8 +166,9 @@ without altering the code in the
 
 However, you may also want to modify the graphical interface:
 
+- Duration of fade-in animations can be set (as a number of seconds, possibly with decimals) in the property file [config.properties](assets/config.properties).
 - For (lightweight) aesthetic customization (e.g. changing colors),
-  you can edit some of the property files of the project.
+  you can edit some of the other property files of the project.
   They are all located in the `assets` folder, and their precise locations are listed in the [FileManager](core/src/main/java/it/unibz/inf/pp/clash/view/singletons/FileManager.java) class.\
   You can also add your own (.png) images under `assets/images/png`:
   place the images in the appropriate subfolders (the folder structure should be self-explanatory),
