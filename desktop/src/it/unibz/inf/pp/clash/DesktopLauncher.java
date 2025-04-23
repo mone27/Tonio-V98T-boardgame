@@ -10,7 +10,7 @@ import it.unibz.inf.pp.clash.view.impl.DisplayManagerImpl;
 
 /**
  * Main class.
- * On macOS, the application needs to be started with the -XstartOnFirstThread JVM argument
+ * On macOS, the application needs to be started with the -XstartOnFirstThread JVM option
  */
 public class DesktopLauncher {
 

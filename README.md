@@ -56,6 +56,7 @@ Open this repository as a Gradle project.
 Then to start the application, run the method [DesktopLauncher.main](desktop/src/it/unibz/inf/pp/clash/DesktopLauncher.java)
   (in your running configuration, you may need to specify `assets` as the Java working directory).
 
+On macOS, you may need to add `-XstartOnFirstThread` as a JVM option.
 
 ## Design
 
