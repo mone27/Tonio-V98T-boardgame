@@ -2,16 +2,14 @@ package it.unibz.inf.pp.clash.model.snapshot.units.impl;
 
 import it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit;
 
-public class Lupetto implements MobileUnit {
+public class Collector implements MobileUnit {
 
     int health;
     UnitColor color;
-
-    //???
     int attackCountdown;
 
-    public Lupetto(){
-        this.health = 3;
+    public Collector(){
+        this.health = 5;
         this.color = UnitColor.TWO;
         this.attackCountdown = 0;
     }
