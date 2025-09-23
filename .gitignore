@@ -9,6 +9,7 @@ hs_err_pid*
 
 # Package files
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 
 # JetBrains IDE
 .idea/

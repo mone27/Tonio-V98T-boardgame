@@ -1,4 +1,4 @@
-# Board game
+# ANIMA: Of chanting beasts
 
 This repository contains a basic graphical user interface for games with mechanics analogous to the ones of
 [Might & Magic: Clash of Heroes](https://www.dotemu.com/games/might-magic-clash-of-heroes-definitive-edition/) or
@@ -7,16 +7,16 @@ This repository contains a basic graphical user interface for games with mechani
 The graphical interface uses the [libGDX](https://libgdx.com/) library.\
 All images were downloaded from [Game-icons.net](https://game-icons.net/).
 
-## Requirements
+## (Updated) Requirements
 
 - Java JDK version 21 or higher
-- Gradle version 8.5 or higher
+- Gradle version 9.1 or higher
 
 ## Usage
 
 ### From a terminal
 
-First, run the Gradle wrapper (once is enough):
+If the Gradle wrapper is broken (e.g., missing the wrapper .jar), or if you want to update the Gradle version, first install Gradle, then run:
 
 ```bash
 gradle wrapper
@@ -32,7 +32,7 @@ gradle wrapper
 - on Windows:
 
 ```bash
-gradlew.bat run
+.\gradlew.bat run
 ```
 
 #### Running the unit tests
@@ -46,7 +46,7 @@ gradlew.bat run
 - on Windows:
 
 ```bash
-gradlew.bat test
+.\gradlew.bat test
 ```
 
 
