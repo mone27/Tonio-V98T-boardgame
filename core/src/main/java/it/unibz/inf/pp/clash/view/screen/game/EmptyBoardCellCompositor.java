@@ -3,6 +3,7 @@ package it.unibz.inf.pp.clash.view.screen.game;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import it.unibz.inf.pp.clash.controller.listeners.EmptyTileHoverAndLeftClickListener;
+import it.unibz.inf.pp.clash.controller.listeners.EmptyTileRightClickListener;
 import it.unibz.inf.pp.clash.model.EventHandler;
 import it.unibz.inf.pp.clash.view.screen.sync.AnimationCounter;
 import it.unibz.inf.pp.clash.view.singletons.ImageManager;
@@ -66,6 +67,12 @@ public class EmptyBoardCellCompositor extends BoarCellCompositor {
         ImageButton button = ImageManager.instance().getEmptyCellButton(isSelectedTile);
         button.addListener(
                 new EmptyTileHoverAndLeftClickListener(
+                        rowIndex,
+                        columnIndex,
+                        eventHandler
+                ));
+        button.addListener(
+                new EmptyTileRightClickListener(
                         rowIndex,
                         columnIndex,
                         eventHandler

@@ -97,7 +97,20 @@ public class TestEventHandler implements EventHandler {
     
     @Override
     public void deleteUnit(int rowIndex, int columnIndex) {
+        Optional<Unit> chosenUnit = this.currentSnap.getBoard().getUnit(rowIndex, columnIndex);
+        String msg = "";
+        // if empty tile
+        if (chosenUnit.isEmpty()){
+            msg = "No unit to be removed";
+            try {this.DM.updateMessage(msg);}
+            catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
+            return;
+        }
 
+        // else: unit is present on tile
+        msg = "Removed " + this.unitInfo(chosenUnit);
+        this.currentSnap.getBoard().removeUnit(rowIndex, columnIndex);
+        this.DM.drawSnapshot(this.currentSnap, msg);        // UI
     }
 
     /*
@@ -108,9 +121,6 @@ public class TestEventHandler implements EventHandler {
 
         if (chosenUnit.isEmpty()) {
             msg = "Empty tile";
-            // UI
-            try {DM.updateMessage(msg);}
-            catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
             return msg;
         }
 
