@@ -6,7 +6,7 @@ import it.unibz.inf.pp.clash.model.snapshot.units.Unit;
  * Dummy unit, for representing tiles when no tile has been yet selected by user
  */
 public class ZeroVoid extends AbstractUnit implements Unit {
-    public ZeroVoid(int health) {
+    public ZeroVoid() {
         super(99);
     }
 }

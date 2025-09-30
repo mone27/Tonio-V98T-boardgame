@@ -5,6 +5,7 @@ import it.unibz.inf.pp.clash.model.snapshot.impl.dummy.DummySnapshot;
 import it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit;
 import it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit.UnitColor;
 import it.unibz.inf.pp.clash.model.snapshot.units.Unit;
+import it.unibz.inf.pp.clash.model.snapshot.units.impl.ZeroVoid;
 import it.unibz.inf.pp.clash.view.DisplayManager;
 import it.unibz.inf.pp.clash.view.exceptions.NoGameOnScreenException;
 
@@ -17,8 +18,9 @@ public class TestEventHandler implements EventHandler {
 
     private boolean isP1 = true;            // current player
 
-    private Optional<Unit> selectedUnit;    // current unit
-
+    private Optional<Unit> selectedUnit = Optional.of(new ZeroVoid());    // current unit
+    private int selectedRowIndex;
+    private int selectedColumnIndex;
 
     public TestEventHandler(DisplayManager displayManager) {
         this.DM = displayManager;
@@ -54,23 +56,36 @@ public class TestEventHandler implements EventHandler {
         String msg = "Turn skipped;\n" + player + " now playing";
 
         // UI
-        try {DM.updateMessage(msg);}
+        try {this.DM.updateMessage(msg);}
         catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
     }
 
 
     @Override
     public void requestInformation(int rowIndex, int columnIndex) {
+        // retrieve unit and its info
         Optional<Unit> chosenUnit = this.currentSnap.getBoard().getUnit(rowIndex, columnIndex);
         String msg = this.unitInfo(chosenUnit);
 
-        try {DM.updateMessage(msg);}
+        // UI (hover)
+        try {this.DM.updateMessage(msg);}
         catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
     }
 
     @Override
     public void selectTile(int rowIndex, int columnIndex) {
+        // retrieve unit and its info
+        Optional<Unit> chosenUnit = this.currentSnap.getBoard().getUnit(rowIndex, columnIndex);
+        String msg = "Selected " + this.unitInfo(chosenUnit);
 
+        // store unit and its coordinates (for reinforcements and movement)
+        this.selectedUnit = chosenUnit;
+        this.selectedRowIndex = rowIndex;
+        this.selectedColumnIndex = columnIndex;
+
+        // UI (left click)
+        try {this.DM.updateMessage(msg);}
+        catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
     }
 
 
@@ -92,7 +107,7 @@ public class TestEventHandler implements EventHandler {
         String msg = "Unit with: \n{";
 
         if (chosenUnit.isEmpty()) {
-            msg = "{Empty tile}";
+            msg = "Empty tile";
             // UI
             try {DM.updateMessage(msg);}
             catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
