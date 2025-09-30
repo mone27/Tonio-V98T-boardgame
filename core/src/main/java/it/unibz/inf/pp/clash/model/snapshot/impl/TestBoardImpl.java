@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Dummy class, for learning/reverse engineering the Board interface and its implementation
  */
-public class BoardImplProva2 implements Board {
+public class TestBoardImpl implements Board {
 
     final Unit[][] grid;
 
@@ -18,7 +18,7 @@ public class BoardImplProva2 implements Board {
      * Constructor, as implemented in the dummy snapshot
      * @param grid array of arrays representing the board tiles
      */
-    public BoardImplProva2(Unit[][] grid) {
+    public TestBoardImpl(Unit[][] grid) {
         this.grid = grid;
     }
 
@@ -34,7 +34,7 @@ public class BoardImplProva2 implements Board {
         Unit[][] grid = new Unit[maxRowIndex + 1][maxColumnIndex + 1];
 
         // create new board through the default constructor
-        return new BoardImplProva2(grid);
+        return new TestBoardImpl(grid);
 
     }
 
@@ -44,7 +44,7 @@ public class BoardImplProva2 implements Board {
      * @param maxRowIndex highest row-wise index
      * @param maxColumnIndex highest column-wise index
      */
-    public BoardImplProva2(int maxRowIndex, int maxColumnIndex){
+    public TestBoardImpl(int maxRowIndex, int maxColumnIndex){
         Unit[][] tmpGrid = new Unit[maxRowIndex + 1][maxColumnIndex + 1];
         this.grid = tmpGrid;
     }
