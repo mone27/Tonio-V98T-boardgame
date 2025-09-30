@@ -5,6 +5,7 @@ import it.unibz.inf.pp.clash.model.snapshot.impl.dummy.DummySnapshot;
 import it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit;
 import it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit.UnitColor;
 import it.unibz.inf.pp.clash.model.snapshot.units.Unit;
+import it.unibz.inf.pp.clash.model.snapshot.units.impl.Fairy;
 import it.unibz.inf.pp.clash.model.snapshot.units.impl.ZeroVoid;
 import it.unibz.inf.pp.clash.view.DisplayManager;
 import it.unibz.inf.pp.clash.view.exceptions.NoGameOnScreenException;
@@ -91,7 +92,27 @@ public class TestEventHandler implements EventHandler {
 
     @Override
     public void callReinforcement() {
+        String msg = "";
+        // if unit already on cell: abort
+        if (this.selectedUnit.isPresent()){
+            msg = "Select an empty cell first";
+            try {this.DM.updateMessage(msg);}
+            catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
+            return;
+        }
 
+        // else empty cell: add reinf. unit
+        Fairy tmpUnit = new Fairy(UnitColor.ONE);
+        this.currentSnap.getBoard().addUnit(this.selectedRowIndex,
+                                            this.selectedColumnIndex,
+                                            tmpUnit);
+        this.selectedUnit = Optional.of(tmpUnit);   // update as last selected cell
+
+        // UI
+        msg = "Added " + this.unitInfo(Optional.of(tmpUnit)) +
+                "\nat cell (" + this.selectedRowIndex + ", " +
+                this.selectedColumnIndex + ")";
+        this.DM.drawSnapshot(this.currentSnap, msg);
     }
 
     
@@ -110,6 +131,7 @@ public class TestEventHandler implements EventHandler {
         // else: unit is present on tile
         msg = "Removed " + this.unitInfo(chosenUnit);
         this.currentSnap.getBoard().removeUnit(rowIndex, columnIndex);
+        // HERE: could add: this.selectedUnit = Optional.of(null);
         this.DM.drawSnapshot(this.currentSnap, msg);        // UI
     }
 
