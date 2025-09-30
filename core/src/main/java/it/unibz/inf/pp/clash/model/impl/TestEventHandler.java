@@ -2,15 +2,23 @@ package it.unibz.inf.pp.clash.model.impl;
 
 import it.unibz.inf.pp.clash.model.EventHandler;
 import it.unibz.inf.pp.clash.model.snapshot.impl.dummy.DummySnapshot;
+import it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit;
+import it.unibz.inf.pp.clash.model.snapshot.units.MobileUnit.UnitColor;
+import it.unibz.inf.pp.clash.model.snapshot.units.Unit;
 import it.unibz.inf.pp.clash.view.DisplayManager;
 import it.unibz.inf.pp.clash.view.exceptions.NoGameOnScreenException;
+
+import java.util.Optional;
 
 public class TestEventHandler implements EventHandler {
 
     private final DisplayManager DM;
     private DummySnapshot currentSnap;
 
-    private boolean isP1 = true;        // current player
+    private boolean isP1 = true;            // current player
+
+    private Optional<Unit> selectedUnit;    // current unit
+
 
     public TestEventHandler(DisplayManager displayManager) {
         this.DM = displayManager;
@@ -37,8 +45,8 @@ public class TestEventHandler implements EventHandler {
 
     @Override
     public void skipTurn() {
-        // invert turns
-        this.isP1 = !this.isP1;
+        this.isP1 = !this.isP1;             // invert turns
+
         // messages
         String player = "";
         if (this.isP1){player = "P1";}
@@ -53,7 +61,11 @@ public class TestEventHandler implements EventHandler {
 
     @Override
     public void requestInformation(int rowIndex, int columnIndex) {
+        Optional<Unit> chosenUnit = this.currentSnap.getBoard().getUnit(rowIndex, columnIndex);
+        String msg = this.unitInfo(chosenUnit);
 
+        try {DM.updateMessage(msg);}
+        catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
     }
 
     @Override
@@ -72,4 +84,33 @@ public class TestEventHandler implements EventHandler {
     public void deleteUnit(int rowIndex, int columnIndex) {
 
     }
+
+    /*
+        Helper methods
+     */
+    public String unitInfo(Optional<Unit> chosenUnit) {
+        String msg = "Unit with: \n{";
+
+        if (chosenUnit.isEmpty()) {
+            msg = "{Empty tile}";
+            // UI
+            try {DM.updateMessage(msg);}
+            catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
+            return msg;
+        }
+
+        Unit extractedUnit = chosenUnit.get();
+        int health = extractedUnit.getHealth();
+
+        if (extractedUnit instanceof MobileUnit mobile){        // pattern var :)
+            UnitColor color = mobile.getColor();
+            int atkCountdown = mobile.getAttackCountdown();
+
+            msg = msg + "Color: " + color + ",\n" +
+                    "Attacks in: " + atkCountdown + " turns,\n";
+        }
+        msg = msg + "Health: " + health + "}";
+        return msg;
+    }
+
 }
