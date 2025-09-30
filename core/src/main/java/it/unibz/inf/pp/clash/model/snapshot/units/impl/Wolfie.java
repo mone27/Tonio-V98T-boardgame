@@ -15,6 +15,11 @@ public class Wolfie implements MobileUnit {
         this.color = UnitColor.TWO;
         this.attackCountdown = 0;
     }
+    public Wolfie(UnitColor color){
+        this.health = 3;
+        this.color = color;
+        this.attackCountdown = 0;
+    }
 
     @Override
     public UnitColor getColor() {
