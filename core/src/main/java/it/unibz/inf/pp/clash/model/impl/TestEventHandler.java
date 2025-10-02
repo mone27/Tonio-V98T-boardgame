@@ -14,14 +14,19 @@ import java.util.Optional;
 
 public class TestEventHandler implements EventHandler {
 
-    private final DisplayManager DM;
-    private DummySnapshot currentSnap;
+        private final DisplayManager DM;
+        private DummySnapshot currentSnap;
 
-    private boolean isP1 = true;            // current player
+        private boolean isP1 = true;            // current player
+        private boolean isMoveSelected = false; // if move button was clicked
 
-    private Optional<Unit> selectedUnit = Optional.of(new ZeroVoid());    // current unit
-    private int selectedRowIndex;
-    private int selectedColumnIndex;
+        private Optional<Unit> selectedUnit = Optional.of(new ZeroVoid());    // current unit
+        private int selectedRowIndex;
+        private int selectedColumnIndex;
+
+        private Optional<Unit> movingUnit = Optional.of(new ZeroVoid());
+        private int movingRowIndex;
+        private int movingColumnIndex;
 
     public TestEventHandler(DisplayManager displayManager) {
         this.DM = displayManager;
@@ -75,16 +80,50 @@ public class TestEventHandler implements EventHandler {
 
     @Override
     public void selectTile(int rowIndex, int columnIndex) {
-        // retrieve unit and its info
+        // retrieve tile(unit) and its info
         Optional<Unit> chosenUnit = this.currentSnap.getBoard().getUnit(rowIndex, columnIndex);
-        String msg = "Selected " + this.unitInfo(chosenUnit);
 
+        // TO HELPER METHOD: movement logic
+        if (this.isMoveSelected &&
+                chosenUnit.isEmpty()){
+
+            // move to new tile
+            this.currentSnap.getBoard().addUnit(
+                    rowIndex,
+                    columnIndex,
+                    this.movingUnit.get());
+
+            // delete unit from old tile
+            this.currentSnap.getBoard().removeUnit(this.movingRowIndex, this.movingColumnIndex);
+
+            // switch movement off
+            this.isMoveSelected = false;
+
+            // store info
+            this.selectedUnit = this.movingUnit;
+            this.selectedRowIndex = rowIndex;
+            this.selectedColumnIndex = columnIndex;
+
+            // UI
+            String msg = "Moved " + this.unitInfo(Optional.of(this.movingUnit.get())) +
+                    "\nfrom cell (" + this.movingRowIndex + ", " + this.movingColumnIndex + ")" +
+                    "\nto cell (" + this.selectedRowIndex + ", " + this.selectedColumnIndex + ")";
+            this.DM.drawSnapshot(this.currentSnap, msg);
+
+            return;
+        }
+
+        // all the following should be moved to a helper method
         // store unit and its coordinates (for reinforcements and movement)
         this.selectedUnit = chosenUnit;
         this.selectedRowIndex = rowIndex;
         this.selectedColumnIndex = columnIndex;
 
         // UI (left click)
+        String msg = "";
+        if (this.isMoveSelected) {
+                msg = "Cannot move: " + this.unitInfo(chosenUnit) + "\non destination tile";}
+        else {msg = "Selected " + this.unitInfo(chosenUnit);}
         try {this.DM.updateMessage(msg);}
         catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
     }
@@ -131,8 +170,37 @@ public class TestEventHandler implements EventHandler {
         // else: unit is present on tile
         msg = "Removed " + this.unitInfo(chosenUnit);
         this.currentSnap.getBoard().removeUnit(rowIndex, columnIndex);
-        // HERE: could add: this.selectedUnit = Optional.of(null);
+        // HERE: empty tile as last selected cell: this.selectedUnit = Optional.of(null);
         this.DM.drawSnapshot(this.currentSnap, msg);        // UI
+    }
+
+    public void moveUnit() {
+        // if movement button was already selected -> cancel action
+        if (this.isMoveSelected){
+            this.isMoveSelected = false;
+            String msg = "Movement cancelled";
+            try {this.DM.updateMessage(msg);}
+            catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
+            return;
+        }
+
+        // if no unit is selected -> exit
+        if (this.selectedUnit.isEmpty() ||
+                this.selectedUnit.get() instanceof ZeroVoid) {
+            String msg = "No unit to be moved";
+            try {this.DM.updateMessage(msg);}
+            catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
+            return;
+        }
+
+        // else, turn movement switch on
+        this.isMoveSelected = true;
+        this.movingUnit = this.selectedUnit;    // store unit for movement
+        this.movingRowIndex = this.selectedRowIndex;
+        this.movingColumnIndex = this.selectedColumnIndex;
+        String msg = "Please select a destination tile";
+        try {this.DM.updateMessage(msg);}
+        catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
     }
 
     /*
@@ -156,8 +224,7 @@ public class TestEventHandler implements EventHandler {
             msg = msg + "Color: " + color + ",\n" +
                     "Attacks in: " + atkCountdown + " turns,\n";
         }
-        msg = msg + "Health: " + health + "}";
-        return msg;
+        return msg + "Health: " + health + "}";
     }
 
 }
