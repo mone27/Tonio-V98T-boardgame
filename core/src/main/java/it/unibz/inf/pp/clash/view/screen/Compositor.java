@@ -47,6 +47,18 @@ public abstract class Compositor {
         table.row();
     }
 
+    /*
+        Testing horizontal space. CURRENTLY NOT WORKING (padding)
+     */
+    protected void addHorizontalSpace(Table table, int padding) {
+        table.add(new Table()).width(padding);  //??? why not working?
+        //table.row();
+    }
+
+    public void addSmallHorizontalSpace(Table table) {
+        addHorizontalSpace(table, Dimensions.instance().getSmallSpace());
+    }
+
     // The last of the three actions has the effect of decrementing the counter of ongoing animations.
     protected void addFadeInAnimation(Actor actor) {
         animationCounter.increment();

@@ -62,4 +62,14 @@ public interface EventHandler {
      */
     void deleteUnit(int rowIndex, int columnIndex);
 
+    /**
+     * This method is called when the user wants to move a unit to another tile.
+     * For it to work, the user must first select a tile with a unit on it.
+     * <p>
+     * This method only signals that the selected unit is ready to be moved.
+     * To complete the movement, the user must click on an empty destination tile.
+     * <p>
+     * If the move button is pressed again before the destination tile is selected, then the action is cancelled.
+     */
+    void moveUnit();
 }

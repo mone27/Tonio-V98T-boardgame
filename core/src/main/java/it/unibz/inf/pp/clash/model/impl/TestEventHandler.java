@@ -85,6 +85,7 @@ public class TestEventHandler implements EventHandler {
 
         // TO HELPER METHOD: movement logic
         if (this.isMoveSelected &&
+                this.movingUnit.isPresent() &&
                 chosenUnit.isEmpty()){
 
             // move to new tile
@@ -121,8 +122,13 @@ public class TestEventHandler implements EventHandler {
 
         // UI (left click)
         String msg = "";
-        if (this.isMoveSelected) {
-                msg = "Cannot move: " + this.unitInfo(chosenUnit) + "\non destination tile";}
+        if (this.isMoveSelected && this.movingUnit.isPresent()) {
+            msg = "Cannot move: " + this.unitInfo(chosenUnit) + "\non destination tile";
+        }
+        else if (this.isMoveSelected) {
+            msg = "Cannot move: " + this.unitInfo(chosenUnit) + "\nwas deleted";
+            this.isMoveSelected = false;
+        }
         else {msg = "Selected " + this.unitInfo(chosenUnit);}
         try {this.DM.updateMessage(msg);}
         catch (NoGameOnScreenException e) {throw new RuntimeException(e);}
@@ -170,10 +176,13 @@ public class TestEventHandler implements EventHandler {
         // else: unit is present on tile
         msg = "Removed " + this.unitInfo(chosenUnit);
         this.currentSnap.getBoard().removeUnit(rowIndex, columnIndex);
-        // HERE: empty tile as last selected cell: this.selectedUnit = Optional.of(null);
+        // HERE: empty tile if it was also the last selected cell: this.selectedUnit = Optional.of(null);
+        if (chosenUnit.equals(this.selectedUnit)){this.selectedUnit = Optional.empty();}
+        if (chosenUnit.equals(this.movingUnit)){this.movingUnit = Optional.empty();}
         this.DM.drawSnapshot(this.currentSnap, msg);        // UI
     }
 
+    @Override
     public void moveUnit() {
         // if movement button was already selected -> cancel action
         if (this.isMoveSelected){

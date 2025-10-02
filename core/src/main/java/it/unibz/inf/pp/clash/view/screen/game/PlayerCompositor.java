@@ -1,6 +1,7 @@
 package it.unibz.inf.pp.clash.view.screen.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import it.unibz.inf.pp.clash.controller.listeners.MovementButtonListener;
 import it.unibz.inf.pp.clash.controller.listeners.ReinforcementButtonListener;
 import it.unibz.inf.pp.clash.controller.listeners.SkipTurnButtonListener;
 import it.unibz.inf.pp.clash.model.EventHandler;
@@ -42,9 +43,13 @@ public class PlayerCompositor extends Compositor {
         switch (player) {
             case FIRST -> {
                 addReinforcementButton(previousSnapshot, newSnapshot, player, playerTable, firstPlayerActive);
-                addLargeVerticalSpace(playerTable);
+                addSmallVerticalSpace(playerTable);                // was large
                 addSkipTurnButton(playerTable, firstPlayerActive);
-                addLargeVerticalSpace(playerTable);
+                // BEGIN TEST
+                //addSmallHorizontalSpace(playerTable);               // TEST
+                addMovementButton(playerTable, firstPlayerActive);  // TEST
+                // END TEST
+                addMediumVerticalSpace(playerTable);                // was large
                 addCountdown(previousSnapshot, newSnapshot, playerTable, firstPlayerActive);
                 addSmallVerticalSpace(playerTable);
                 addHealth(previousHero, newHero, playerTable);
@@ -63,9 +68,13 @@ public class PlayerCompositor extends Compositor {
                 addHealth(previousHero, newHero, playerTable);
                 addSmallVerticalSpace(playerTable);
                 addCountdown(previousSnapshot, newSnapshot, playerTable, !firstPlayerActive);
-                addLargeVerticalSpace(playerTable);
+                addMediumVerticalSpace(playerTable);                // was large
                 addSkipTurnButton(playerTable, !firstPlayerActive);
-                addLargeVerticalSpace(playerTable);
+                // BEGIN TEST
+                addMovementButton(playerTable, !firstPlayerActive);
+                //addMediumVerticalSpace(playerTable); // currently too large with vertical spaces. why?
+                // END TEST
+                addSmallVerticalSpace(playerTable);                 // was large
                 addReinforcementButton(previousSnapshot, newSnapshot, player, playerTable, !firstPlayerActive);
             }
         }
@@ -76,6 +85,27 @@ public class PlayerCompositor extends Compositor {
         if(isActive) {
             ImageButton button = getImageButton(SKIP, LARGE, false);
             button.addListener(new SkipTurnButtonListener(eventHandler));
+            addSquareImageButton(
+                    playerTable,
+                    button,
+                    Dimensions.instance().getLargeSquareIconLength()
+            );
+        } else {
+            addVerticalSpace(playerTable, Dimensions.instance().getLargeSquareIconLength());
+        }
+        // COMMENTED OUT AS TEST FOR P1
+        //playerTable.row();
+    }
+
+    /**
+     * TO BE TESTED
+     * @param playerTable
+     * @param isActive
+     */
+    private void addMovementButton(Table playerTable, boolean isActive){
+        if(isActive) {
+            ImageButton button = getImageButton(MOVE, LARGE, false);
+            button.addListener(new MovementButtonListener(eventHandler));
             addSquareImageButton(
                     playerTable,
                     button,
